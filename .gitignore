@@ -1,0 +1,14 @@
+*.pyc
+*.idea
+*~
+*.log
+.project
+.pydevproject
+log/
+.coverage
+coverage.xml
+nose2-junit.xml
+*.yc
+.settings/
+bin/
+test/data/WNAP320 Firmware Version 2.0.3.zip
