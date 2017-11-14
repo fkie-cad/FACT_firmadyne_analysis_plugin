@@ -4,7 +4,7 @@ from common_helper_files import get_dir_of_file
 import os
 import unittest
 
-from ..internal.firmadyne_execution import clean_firmadyne, extract_image, match_unique_exploit_log_files, sort_text_file, parse_logfile_list, start_nmap_analysis, start_metasploit_analysis, start_web_access_analysis, execute_analysis_scripts, start_snmp_walk, check_network_accessibility, start_analysis, execute_firmadyne
+from ..internal.firmadyne_execution import clean_firmadyne, extract_image, match_unique_exploit_log_files, move_folder_strings_at_the_end, sort_lines_of_text_file, transform_text_into_jstree_structure, parse_logfile_list, start_nmap_analysis, start_metasploit_analysis, start_web_access_analysis, execute_analysis_scripts, start_snmp_walk, check_network_accessibility, start_analysis, execute_firmadyne
 
 
 class TestPluginFirmadyne(unittest.TestCase):
@@ -35,11 +35,23 @@ class TestPluginFirmadyne(unittest.TestCase):
         log_list = [os.path.join(self.testfiles_path, 'exploit.64.log')]
         self.assertEqual(parse_logfile_list(log_list), '[*] Spooling to file /home/bad-fw/git/faf/src/bin/firmadyne/exploits/exploit.64.log...\nresource (script.rc)> use auxiliary/scanner/ssl/openssl_ccs\nresource (script.rc)> exploit -z\n[+] 192.168.0.100:443     - No alert after invalid CCS message, probably vulnerable\n[*] 192.168.0.100:443     - Scanned 1 of 1 hosts (100% complete)\n[*] Auxiliary module execution completed\nresource (script.rc)> spool off\n\n------------\n')
 
-    def test_sort_textfile(self):
+    def test_move_folder_strings_at_the_end(self):
+        string_list = ["a/b/c", "a", "b/a", "y", "d/", "d", "a/b/x", "u"]
+        desired_output_list = ["a", "y", "d", "u", "a/b/c", "b/a", "d/", "a/b/x"]
+        self.assertEqual(move_folder_strings_at_the_end(string_list), desired_output_list)
+
+    def test_sort_lines_of_text_file(self):
         text_file_path = os.path.join(self.testfiles_path, 'log.txt')
-        sorted_text_file_path = os.path.join(self.testfiles_path, 'sorted_log.txt')
-        sorted_lines = sort_text_file(text_file_path, sorted_text_file_path)
-        self.assertEqual(sorted_lines, 'BackupConfig.php\nUserGuide.html\nbackground.html\n')
+        sorted_lines = sort_lines_of_text_file(text_file_path)
+        self.assertEqual(sorted_lines, "BackupConfig.php\nUserGuide.html\nbackground.html\nabc/a.txt\n")
+
+    def test_transform_text_into_jstree_structure(self):
+        input_sample = "test1.txt\netc/sub_folder/sub_sub_folder\netc/sub_folder2"
+        self.assertEqual(transform_text_into_jstree_structure(input_sample), [{"parent": "#", "id": "test1.txt", "text": "test1.txt", "icon": "/static/file_icons/text.png"},
+                                                                              {"parent": "#", "id": "etc", "text": "etc", "icon": "/static/file_icons/folder.png"},
+                                                                              {"parent": "etc", "id": "sub_folder", "text": "sub_folder", "icon": "/static/file_icons/folder.png"},
+                                                                              {"parent": "sub_folder", "id": "sub_sub_folder", "text": "sub_sub_folder", "icon": "/static/file_icons/text.png"},
+                                                                              {"parent": "etc", "id": "sub_folder2", "text": "sub_folder2", "icon": "/static/file_icons/text.png"}])
 
     def test_start_nmap_analysis(self):
         ip_address = ''

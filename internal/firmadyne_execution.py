@@ -158,12 +158,63 @@ def start_web_access_analysis(ip_address):
     command = 'python3 {}/analyses/webAccess.py 1 {} {}'.format(firmadyne_path, ip_address, logfile_path)
 
     if not execute_shell_command_get_return_code(command)[1]:
-        sorted_logfile_path = os.path.join(firmadyne_path, 'sorted_log.txt')
-        attribute_list = sort_text_file(logfile_path, sorted_logfile_path)
-        if not attribute_list:
+        sorted_lines = sort_lines_of_text_file(logfile_path)
+        list_of_jstree_dict = transform_text_into_jstree_structure(sorted_lines)
+        if not list_of_jstree_dict:
             return 1, 'No accessible web files found'
-        return 1, attribute_list
+        return 1, list_of_jstree_dict
     return 0, 'ERROR - Executing web access analysis failed'
+
+
+def transform_text_into_jstree_structure(string):
+    string_list = string.split("\n")
+    list_of_jstree_dict = []
+    for list_element in string_list:
+        if not list_element:
+            continue
+        parent = "#"
+        if "/" not in list_element:
+            jstree_dict = {"id": list_element, "parent": parent, "text": list_element, "icon": "/static/file_icons/text.png"}
+            if jstree_dict in list_of_jstree_dict:
+                continue
+            list_of_jstree_dict.append(jstree_dict)
+        if "/" in list_element:
+            line_list = list_element.split("/")
+            parent_counter = 1
+            for list_element in line_list:
+                jstree_dict = {"id": list_element, "parent": parent, "text": list_element}
+                if parent_counter < len(line_list):
+                    jstree_dict.update({"icon": "/static/file_icons/folder.png"})
+                    parent_counter += 1
+                else:
+                    jstree_dict.update({"icon": "/static/file_icons/text.png"})
+                parent = list_element
+                if jstree_dict in list_of_jstree_dict:
+                    continue
+                list_of_jstree_dict.append(jstree_dict)
+    return list_of_jstree_dict
+
+
+def move_folder_strings_at_the_end(string_list):
+    counter = 0
+    list_counter = 0
+    while counter < (len(string_list)):
+        if "/" in string_list[list_counter]:
+            poped_line = string_list.pop(list_counter)
+            string_list.append(poped_line)
+            list_counter -= 1
+        counter += 1
+        list_counter += 1
+    return string_list
+
+
+def sort_lines_of_text_file(text_file_path):
+    with open('{}'.format(text_file_path), 'r') as text_file:
+        lines_list = text_file.readlines()
+        lines_list.sort()
+    separated_folder_strings = move_folder_strings_at_the_end(lines_list)
+    lines = "".join(separated_folder_strings)
+    return lines
 
 
 def start_metasploit_analysis(ip_address):
@@ -198,14 +249,6 @@ def parse_positive_metasploit_logs(logfiles_dir):
         return 0
     log_data_list = parse_logfile_list(exploit_log_filename_list)
     return log_data_list
-
-
-def sort_text_file(text_file_path, sorted_text_file_path):
-    with open('{}'.format(text_file_path), 'r') as text_file:
-        lines = text_file.readlines()
-        lines.sort()
-    lines = "".join(lines)
-    return lines
 
 
 def parse_logfile_list(logfile_list):
