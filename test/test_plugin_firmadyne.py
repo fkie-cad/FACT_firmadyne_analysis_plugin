@@ -5,7 +5,7 @@ import os
 import unittest
 
 from ..internal.firmadyne_execution import clean_firmadyne, extract_image, match_unique_exploit_log_files,\
-    move_folder_strings_at_the_end, get_sorted_lines_from_text_file, transform_text_into_jstree_structure,\
+    move_folder_strings_at_the_end, get_list_of_sorted_lines_from_text_file, transform_string_of_paths_into_jstree_structure,\
     parse_logfile_list, start_nmap_analysis, start_metasploit_analysis, start_web_access_analysis,\
     execute_analysis_scripts, start_snmp_walk, check_network_accessibility, start_analysis, execute_firmadyne
 
@@ -45,16 +45,16 @@ class TestPluginFirmadyne(unittest.TestCase):
 
     def test_sort_lines_of_text_file(self):
         text_file_path = os.path.join(self.testfiles_path, 'log.txt')
-        sorted_lines = get_sorted_lines_from_text_file(text_file_path)
+        sorted_lines = get_list_of_sorted_lines_from_text_file(text_file_path)
         self.assertEqual(sorted_lines, "BackupConfig.php\nUserGuide.html\nbackground.html\nabc/a.txt\n")
 
     def test_transform_text_into_jstree_structure(self):
         input_sample = "test1.txt\netc/sub_folder/sub_sub_folder\netc/sub_folder2"
-        self.assertEqual(transform_text_into_jstree_structure(input_sample), [{"parent": "#", "id": "test1.txt", "text": "test1.txt", "icon": "/static/file_icons/text.png"},
-                                                                              {"parent": "#", "id": "etc", "text": "etc", "icon": "/static/file_icons/folder.png"},
-                                                                              {"parent": "etc", "id": "sub_folder", "text": "sub_folder", "icon": "/static/file_icons/folder.png"},
-                                                                              {"parent": "sub_folder", "id": "sub_sub_folder", "text": "sub_sub_folder", "icon": "/static/file_icons/text.png"},
-                                                                              {"parent": "etc", "id": "sub_folder2", "text": "sub_folder2", "icon": "/static/file_icons/text.png"}])
+        self.assertEqual(transform_string_of_paths_into_jstree_structure(input_sample), [{"parent": "#", "id": "test1.txt", "text": "test1.txt", "icon": "/static/file_icons/text.png"},
+                                                                                         {"parent": "#", "id": "etc", "text": "etc", "icon": "/static/file_icons/folder.png"},
+                                                                                         {"parent": "etc", "id": "sub_folder", "text": "sub_folder", "icon": "/static/file_icons/folder.png"},
+                                                                                         {"parent": "sub_folder", "id": "sub_sub_folder", "text": "sub_sub_folder", "icon": "/static/file_icons/text.png"},
+                                                                                         {"parent": "etc", "id": "sub_folder2", "text": "sub_folder2", "icon": "/static/file_icons/text.png"}])
 
     def test_start_nmap_analysis(self):
         ip_address = ''

@@ -158,15 +158,22 @@ def start_web_access_analysis(ip_address):
     command = 'python3 {}/analyses/webAccess.py 1 {} {}'.format(firmadyne_path, ip_address, logfile_path)
 
     if not execute_shell_command_get_return_code(command)[1]:
-        sorted_lines = get_sorted_lines_from_text_file(logfile_path)
-        list_of_jstree_dict = transform_text_into_jstree_structure(sorted_lines)
+        list_of_jstree_dict = transform_log_data_of_web_accessible_files_into_jstree_structure(logfile_path)
         if not list_of_jstree_dict:
             return 1, 'No accessible web files found'
         return 1, list_of_jstree_dict
     return 0, 'ERROR - Executing web access analysis failed'
 
 
-def transform_text_into_jstree_structure(string):
+def transform_log_data_of_web_accessible_files_into_jstree_structure(logfile_path):
+    sorted_lines_list = get_list_of_sorted_lines_from_text_file(logfile_path)
+    sorted_lines_list = move_folder_strings_at_the_end(sorted_lines_list)
+    sorted_lines = "".join(sorted_lines_list)
+    list_of_jstree_dict = transform_string_of_paths_into_jstree_structure(sorted_lines)
+    return list_of_jstree_dict
+
+
+def transform_string_of_paths_into_jstree_structure(string):
     string_list = string.split("\n")
     list_of_jstree_dict = []
     for list_element in string_list:
@@ -204,13 +211,11 @@ def move_folder_strings_at_the_end(string_list):
     return sorted(string_list, key=lambda x: 1 if '/' in x else 0)
 
 
-def get_sorted_lines_from_text_file(text_file_path):
+def get_list_of_sorted_lines_from_text_file(text_file_path):
     with open('{}'.format(text_file_path), 'r') as text_file:
         lines_list = text_file.readlines()
         lines_list.sort()
-    separated_folder_strings = move_folder_strings_at_the_end(lines_list)
-    lines = "".join(separated_folder_strings)
-    return lines
+    return lines_list
 
 
 def start_metasploit_analysis(ip_address):
