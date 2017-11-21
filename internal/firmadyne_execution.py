@@ -158,7 +158,7 @@ def start_web_access_analysis(ip_address):
     command = 'python3 {}/analyses/webAccess.py 1 {} {}'.format(firmadyne_path, ip_address, logfile_path)
 
     if not execute_shell_command_get_return_code(command)[1]:
-        sorted_lines = sort_lines_of_text_file(logfile_path)
+        sorted_lines = get_sorted_lines_from_text_file(logfile_path)
         list_of_jstree_dict = transform_text_into_jstree_structure(sorted_lines)
         if not list_of_jstree_dict:
             return 1, 'No accessible web files found'
@@ -199,20 +199,12 @@ def derive_jstree_tree_structure_from_path(list_element, list_of_jstree_dict, pa
         jstree_tree_list.append(jstree_dict)
     return jstree_tree_list
 
+
 def move_folder_strings_at_the_end(string_list):
-    counter = 0
-    list_counter = 0
-    while counter < (len(string_list)):
-        if "/" in string_list[list_counter]:
-            poped_line = string_list.pop(list_counter)
-            string_list.append(poped_line)
-            list_counter -= 1
-        counter += 1
-        list_counter += 1
-    return string_list
+    return sorted(string_list, key=lambda x: 1 if '/' in x else 0)
 
 
-def sort_lines_of_text_file(text_file_path):
+def get_sorted_lines_from_text_file(text_file_path):
     with open('{}'.format(text_file_path), 'r') as text_file:
         lines_list = text_file.readlines()
         lines_list.sort()

@@ -4,7 +4,10 @@ from common_helper_files import get_dir_of_file
 import os
 import unittest
 
-from ..internal.firmadyne_execution import clean_firmadyne, extract_image, match_unique_exploit_log_files, move_folder_strings_at_the_end, sort_lines_of_text_file, transform_text_into_jstree_structure, parse_logfile_list, start_nmap_analysis, start_metasploit_analysis, start_web_access_analysis, execute_analysis_scripts, start_snmp_walk, check_network_accessibility, start_analysis, execute_firmadyne
+from ..internal.firmadyne_execution import clean_firmadyne, extract_image, match_unique_exploit_log_files,\
+    move_folder_strings_at_the_end, get_sorted_lines_from_text_file, transform_text_into_jstree_structure,\
+    parse_logfile_list, start_nmap_analysis, start_metasploit_analysis, start_web_access_analysis,\
+    execute_analysis_scripts, start_snmp_walk, check_network_accessibility, start_analysis, execute_firmadyne
 
 
 class TestPluginFirmadyne(unittest.TestCase):
@@ -42,7 +45,7 @@ class TestPluginFirmadyne(unittest.TestCase):
 
     def test_sort_lines_of_text_file(self):
         text_file_path = os.path.join(self.testfiles_path, 'log.txt')
-        sorted_lines = sort_lines_of_text_file(text_file_path)
+        sorted_lines = get_sorted_lines_from_text_file(text_file_path)
         self.assertEqual(sorted_lines, "BackupConfig.php\nUserGuide.html\nbackground.html\nabc/a.txt\n")
 
     def test_transform_text_into_jstree_structure(self):
