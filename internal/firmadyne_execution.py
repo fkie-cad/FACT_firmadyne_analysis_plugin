@@ -177,12 +177,12 @@ def transform_text_into_jstree_structure(string):
             jstree_dict = {"id": list_element, "parent": parent, "text": list_element, "icon": "/static/file_icons/text.png"}
             list_of_jstree_dict.append(jstree_dict)
         if "/" in list_element:
-            jstree_tree_dict = derive_jstree_tree_structure_for_path(list_element, list_of_jstree_dict, parent)
+            jstree_tree_dict = derive_jstree_tree_structure_from_path(list_element, list_of_jstree_dict, parent)
             list_of_jstree_dict = list_of_jstree_dict + jstree_tree_dict
     return list_of_jstree_dict
 
 
-def derive_jstree_tree_structure_for_path(list_element, list_of_jstree_dict, parent):
+def derive_jstree_tree_structure_from_path(list_element, list_of_jstree_dict, parent):
     jstree_tree_list = []
     line_list = list_element.split("/")
     parent_counter = 1
