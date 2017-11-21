@@ -175,25 +175,29 @@ def transform_text_into_jstree_structure(string):
         parent = "#"
         if "/" not in list_element:
             jstree_dict = {"id": list_element, "parent": parent, "text": list_element, "icon": "/static/file_icons/text.png"}
-            if jstree_dict in list_of_jstree_dict:
-                continue
             list_of_jstree_dict.append(jstree_dict)
         if "/" in list_element:
-            line_list = list_element.split("/")
-            parent_counter = 1
-            for list_element in line_list:
-                jstree_dict = {"id": list_element, "parent": parent, "text": list_element}
-                if parent_counter < len(line_list):
-                    jstree_dict.update({"icon": "/static/file_icons/folder.png"})
-                    parent_counter += 1
-                else:
-                    jstree_dict.update({"icon": "/static/file_icons/text.png"})
-                parent = list_element
-                if jstree_dict in list_of_jstree_dict:
-                    continue
-                list_of_jstree_dict.append(jstree_dict)
+            jstree_tree_dict = derive_jstree_tree_structure_for_path(list_element, list_of_jstree_dict, parent)
+            list_of_jstree_dict = list_of_jstree_dict + jstree_tree_dict
     return list_of_jstree_dict
 
+
+def derive_jstree_tree_structure_for_path(list_element, list_of_jstree_dict, parent):
+    jstree_tree_list = []
+    line_list = list_element.split("/")
+    parent_counter = 1
+    for list_element in line_list:
+        jstree_dict = {"id": list_element, "parent": parent, "text": list_element}
+        if parent_counter < len(line_list):
+            jstree_dict.update({"icon": "/static/file_icons/folder.png"})
+            parent_counter += 1
+        else:
+            jstree_dict.update({"icon": "/static/file_icons/text.png"})
+        parent = list_element
+        if jstree_dict in list_of_jstree_dict:
+            continue
+        jstree_tree_list.append(jstree_dict)
+    return jstree_tree_list
 
 def move_folder_strings_at_the_end(string_list):
     counter = 0
