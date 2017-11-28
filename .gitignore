@@ -1,6 +1,7 @@
 *.pyc
 *.idea
 *~
+-*.log
 .project
 .pydevproject
 log/
