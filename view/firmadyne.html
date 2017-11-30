@@ -65,7 +65,30 @@
 	{% if firmware.processed_analysis[selected_analysis]['Accessible web files'] %}
 	<tr>
 		<td class="active">Accessible web files:</td>
-		<td class="active"><pre><code>{{ firmware.processed_analysis[selected_analysis]['Accessible web files'] }}</code></pre></td>
+		<td class="active">
+			<div class="col-lg-12">
+				<table class="table table-bordered" width="800" valign="center" align="center" border="0">
+					<tr class="success" align="center">
+						<th class="result">File Tree</th>
+					</tr>
+					<tr>
+						<td>
+							<div id="fileTreeAjax2"></div>
+							<script type="text/javascript">
+								jdata = {{ firmware.processed_analysis[selected_analysis]['Accessible web files']|safe }};
+								$('#fileTreeAjax2')
+									.jstree({
+									  "core" : {
+										'data' : jdata
+									  },
+									  "plugins" : []
+									});
+							</script>
+						</td>
+					</tr>
+				</table>
+			</div>
+		</td>
 	</tr>
 	{% endif %}
 	{% if firmware.processed_analysis[selected_analysis]['Result'] %}

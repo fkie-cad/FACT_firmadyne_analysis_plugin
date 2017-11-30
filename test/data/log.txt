@@ -1,3 +1,4 @@
 UserGuide.html
 background.html
+abc/a.txt
 BackupConfig.php
