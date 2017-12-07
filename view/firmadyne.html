@@ -2,67 +2,67 @@
 
 {% block analysis_result_details %}
 
-	{% if firmware.processed_analysis[selected_analysis]['STEP 1 - Extraction'] %}
+	{% if firmware.processed_analysis[selected_analysis]['extraction'] %}
 	<tr>
 		<td class="active">STEP 1 - Extraction:</td>
-		<td class="active">{{ firmware.processed_analysis[selected_analysis]['STEP 1 - Extraction'] }}</td>
+		<td class="active">{{ firmware.processed_analysis[selected_analysis]['extraction'] }}</td>
 	</tr>
 	{% endif %}
-	{% if firmware.processed_analysis[selected_analysis]['STEP 2 - Storing Architecture'] %}
+	{% if firmware.processed_analysis[selected_analysis]['store_architecture'] %}
 	<tr>
 		<td class="active">STEP 2 - Storing Architecture:</td>
-		<td class="active">{{ firmware.processed_analysis[selected_analysis]['STEP 2 - Storing Architecture'] }}</td>
+		<td class="active">{{ firmware.processed_analysis[selected_analysis]['store_architecture'] }}</td>
 	</tr>
 	{% endif %}
-	{% if firmware.processed_analysis[selected_analysis]['STEP 3 - Load Filesystem'] %}
+	{% if firmware.processed_analysis[selected_analysis]['load_filesystem'] %}
 	<tr>
 		<td class="active">STEP 3 - Load Filesystem:</td>
-		<td class="active">{{ firmware.processed_analysis[selected_analysis]['STEP 3 - Load Filesystem'] }}</td>
+		<td class="active">{{ firmware.processed_analysis[selected_analysis]['load_filesystem'] }}</td>
 	</tr>
 	{% endif %}
-	{% if firmware.processed_analysis[selected_analysis]['STEP 4 - Create QEMU Image'] %}
+	{% if firmware.processed_analysis[selected_analysis]['create_qemu_image'] %}
 	<tr>
 		<td class="active">STEP 4 - Create QEMU Image:</td>
-		<td class="active">{{ firmware.processed_analysis[selected_analysis]['STEP 4 - Create QEMU Image'] }}</td>
+		<td class="active">{{ firmware.processed_analysis[selected_analysis]['create_qemu_image'] }}</td>
 	</tr>
 	{% endif %}
-	{% if firmware.processed_analysis[selected_analysis]['STEP 5 - Infer Network'] %}
+	{% if firmware.processed_analysis[selected_analysis]['infer_network_configuration'] %}
 	<tr>
-		<td class="active">STEP 5 - Infer Network:</td>
-		<td class="active">{{ firmware.processed_analysis[selected_analysis]['STEP 5 - Infer Network'] }}</td>
+		<td class="active">STEP 5 - Infer Network Configuration:</td>
+		<td class="active">{{ firmware.processed_analysis[selected_analysis]['infer_network_configuration'] }}</td>
 	</tr>
 	{% endif %}
-	{% if firmware.processed_analysis[selected_analysis]['IP'] %}
+	{% if firmware.processed_analysis[selected_analysis]['ip'] %}
 	<tr>
 		<td class="active">IP:</td>
-		<td class="active">{{ firmware.processed_analysis[selected_analysis]['IP'] }}</td>
+		<td class="active">{{ firmware.processed_analysis[selected_analysis]['ip'] }}</td>
 	</tr>
 	{% endif %}
-	{% if firmware.processed_analysis[selected_analysis]['STEP 6 - Emulation'] %}
+	{% if firmware.processed_analysis[selected_analysis]['emulation'] %}
 	<tr>
 		<td class="active">STEP 6 - Emulation:</td>
-		<td class="active">{{ firmware.processed_analysis[selected_analysis]['STEP 6 - Emulation'] }}</td>
+		<td class="active">{{ firmware.processed_analysis[selected_analysis]['emulation'] }}</td>
 	</tr>
 	{% endif %}
-	{% if firmware.processed_analysis[selected_analysis]['STEP 7 - Analysis'] %}
+	{% if firmware.processed_analysis[selected_analysis]['analysis'] %}
 	<tr>
 		<td class="active">STEP 7 - Analysis:</td>
-		<td class="active">{{ firmware.processed_analysis[selected_analysis]['STEP 7 - Analysis'] }}</td>
+		<td class="active">{{ firmware.processed_analysis[selected_analysis]['analysis'] }}</td>
 	</tr>
 	{% endif %}
-	{% if firmware.processed_analysis[selected_analysis]['Metasploit Results'] %}
+	{% if firmware.processed_analysis[selected_analysis]['metasploit_results'] %}
 	<tr>
 		<td class="active">Metasploit Results:</td>
-		<td class="active"><pre><code>{{ firmware.processed_analysis[selected_analysis]['Metasploit Results'] }}</code></pre></td>
+		<td class="active"><pre><code>{{ firmware.processed_analysis[selected_analysis]['metasploit_results'] }}</code></pre></td>
 	</tr>
 	{% endif %}
-	{% if firmware.processed_analysis[selected_analysis]['Nmap Results:'] %}
+	{% if firmware.processed_analysis[selected_analysis]['nmap_results'] %}
 	<tr>
 		<td class="active">Nmap Results:</td>
-		<td class="active"><pre><code>{{ firmware.processed_analysis[selected_analysis]['Nmap Results:'] }}</code></pre></td>
+		<td class="active"><pre><code>{{ firmware.processed_analysis[selected_analysis]['nmap_results'] }}</code></pre></td>
 	</tr>
 	{% endif %}
-	{% if firmware.processed_analysis[selected_analysis]['Accessible web files'] %}
+	{% if firmware.processed_analysis[selected_analysis]['accessible_web_files'] %}
 	<tr>
 		<td class="active">Accessible web files:</td>
 		<td class="active">
@@ -75,7 +75,7 @@
 						<td>
 							<div id="fileTreeAjax2"></div>
 							<script type="text/javascript">
-								jdata = {{ firmware.processed_analysis[selected_analysis]['Accessible web files']|safe }};
+								jdata = {{ firmware.processed_analysis[selected_analysis]['accessible_web_files']|safe }};
 								$('#fileTreeAjax2')
 									.jstree({
 									  "core" : {
@@ -91,10 +91,10 @@
 		</td>
 	</tr>
 	{% endif %}
-	{% if firmware.processed_analysis[selected_analysis]['Result'] %}
+	{% if firmware.processed_analysis[selected_analysis]['result'] %}
 	<tr>
 		<td class="active">Result:</td>
-		<td class="active">{{ firmware.processed_analysis[selected_analysis]['Result'] }}</td>
+		<td class="active">{{ firmware.processed_analysis[selected_analysis]['result'] }}</td>
 	</tr>
 	{% endif %}
 
