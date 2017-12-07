@@ -35,10 +35,13 @@ def run_firmadyne(input_file):
     command = '/usr/bin/python3 {}/firmadyne_wrapper.py {} > {}/LOG.log'.format(INTERNAL_DIRECTORY_PATH, input_file, FIRMADYNE_INSTALLATION_DIR)
     execute_shell_command(command)
     try:
-        results_json = open('{}/results.json'.format(FIRMADYNE_INSTALLATION_DIR), 'r').read()
+        result_file = '{}/results.json'.format(FIRMADYNE_INSTALLATION_DIR)
+        with open(result_file, 'r') as filepointer:
+            results_json = filepointer.read()
         dict_results = json.loads(results_json)
+        os.remove(result_file)
     except Exception as e:
         error_message = 'could not load firmadyne result: {} {}'.format(sys.exc_info()[0].__name__, e)
         logging.error(error_message)
-        dict_results = {'Result Load Error': error_message}
+        dict_results = {'result': 'Failed', 'error_message': error_message}
     return dict_results
