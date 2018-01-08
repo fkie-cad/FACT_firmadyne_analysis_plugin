@@ -1,10 +1,9 @@
+from common_helper_files.fail_safe_file_operations import get_binary_from_file
+from common_helper_process.fail_safe_subprocess import execute_shell_command_get_return_code
 import os
 import re
 
-from common_helper_files.fail_safe_file_operations import get_binary_from_file
-from common_helper_process.fail_safe_subprocess import execute_shell_command_get_return_code
-
-from plugins.analysis.firmadyne.internal import FIRMADYNE_PATH, ResultType
+from helper import FIRMADYNE_PATH, ResultType
 
 
 def start_analysis(result_dict):

@@ -1,16 +1,20 @@
 #! /usr/bin/env python3
 import argparse
+from collections import OrderedDict
+from common_helper_process import execute_shell_command_get_return_code, execute_shell_command, execute_interactive_shell_command
 import json
 import os
-import sys
-from collections import OrderedDict
-
 import pexpect
-from common_helper_process import execute_shell_command_get_return_code, execute_shell_command, execute_interactive_shell_command
+import sys
+from common_helper_files import get_dir_of_file
 
-from plugins.analysis.firmadyne.internal import FIRMADYNE_PATH, change_dir_to_firmadyne_dir, ResultType
-from plugins.analysis.firmadyne.internal.steps.analysis import start_analysis
-from plugins.analysis.firmadyne.internal.steps.emulation import start_emulation
+INTERNAL_DIRECTORY_PATH = os.path.join(get_dir_of_file(__file__))
+
+sys.path.append(INTERNAL_DIRECTORY_PATH)
+
+from helper import FIRMADYNE_PATH, ResultType, change_dir_to_firmadyne_dir
+from steps.analysis import start_analysis
+from steps.emulation import start_emulation
 
 
 def firmadyne(input_file):
