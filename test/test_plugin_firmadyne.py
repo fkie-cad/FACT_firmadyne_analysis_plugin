@@ -1,8 +1,5 @@
-#! /usr/bin/env python3
 import os
-import unittest
 import pytest
-
 from common_helper_files import get_dir_of_file
 
 from plugins.analysis.firmadyne.internal.helper import ResultType
@@ -26,6 +23,7 @@ def test_extract_image(input_data, expected):
     clean_firmadyne()
 
 
+# test parameter meaningful?
 @pytest.mark.parametrize('input_data, expected', [
     ('', []),
     ('aaaaaaaaa', [])
@@ -60,6 +58,7 @@ def test_transform_text_into_jstree_structure():
     ]
 
 
+# test parameter meaningful?
 @pytest.mark.parametrize('input_data, expected', [
     ('', ResultType.SUCCESS),
     ('88', ResultType.SUCCESS)
@@ -69,6 +68,7 @@ def test_analysis_nmap(input_data, expected):
     assert start_nmap_analysis(result_dict) == expected
 
 
+# test parameter meaningful?
 @pytest.mark.parametrize('input_data, expected', [
     ('', ResultType.SUCCESS),
     ('88', ResultType.SUCCESS)
@@ -78,6 +78,7 @@ def test_analysis_snmp(input_data, expected):
     assert start_snmp_walk(result_dict) == expected
 
 
+# test parameter meaningful?
 @pytest.mark.parametrize('input_data, expected', [
     ('', ResultType.FAILURE),
     ('88', ResultType.SUCCESS),
@@ -88,6 +89,7 @@ def test_analysis_web_access(input_data, expected):
     assert start_web_access_analysis(result_dict) == expected
 
 
+# test parameter meaningful?
 @pytest.mark.skip(reason="too slow")
 @pytest.mark.parametrize('input_data, expected', [
     ('', ResultType.SUCCESS),
@@ -99,6 +101,7 @@ def test_analysis_metasploit(input_data, expected):
     assert start_metasploit_analysis(result_dict) == expected
 
 
+# test parameter meaningful?
 @pytest.mark.parametrize('input_data, expected', [
     ('', 0),
     ('aaa', 0),

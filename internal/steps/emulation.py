@@ -1,8 +1,6 @@
 import multiprocessing
-import os
 import time
-import sys
-from common_helper_files import get_dir_of_file
+import logging
 from common_helper_process.fail_safe_subprocess import execute_shell_command_get_return_code
 
 from helper import FIRMADYNE_PATH, ResultType
@@ -19,18 +17,19 @@ def start_emulation(result_dict, emulation_init_time):
 
 
 def start_emulation_process_parallel(emulation_init_time):
-    '''emulation_process = multiprocessing.Process(name='firmware emulation', target=emulate_firmware)
+    emulation_process = multiprocessing.Process(name='firmware emulation', target=emulate_firmware)
     emulation_process.start()
     time.sleep(emulation_init_time)
-    return emulation_process'''
-    pass
+    return emulation_process
 
 
 def check_network_accessibility(ip_address):
-    if os.system('ping -c 1 ' + ip_address) == 0:
-        return 1
+    output, rc = execute_shell_command_get_return_code('ping -c 1 {}'.format(ip_address), timeout=5)
+    logging.debug('check_network:\/n{}'.format(output))
+    if rc == 0:
+        return True
     else:
-        return 0
+        return False
 
 
 def emulate_firmware():

@@ -6,6 +6,7 @@ import json
 import os
 import pexpect
 import sys
+import logging
 from common_helper_files import get_dir_of_file
 
 INTERNAL_DIRECTORY_PATH = os.path.join(get_dir_of_file(__file__))
@@ -36,11 +37,11 @@ def execute_firmadyne(input_file):
 
     firmware_emulation = start_emulation(result_dict, emulation_init_time=40)
     if ResultType.FAILURE in result_dict.values():
-        '''firmware_emulation.terminate()'''
+        firmware_emulation.terminate()
         return ResultType.FAILURE, result_dict
 
     analysis = start_analysis(result_dict)
-    # firmware_emulation.terminate()
+    firmware_emulation.terminate()
     if analysis == ResultType.FAILURE:
         return ResultType.FAILURE, result_dict
 
@@ -50,28 +51,18 @@ def execute_firmadyne(input_file):
 def prepare_emulation(input_file, result_dict):
     result_attribute = extract_image(input_file)
     result_dict.update(result_attribute)
+    print(result_attribute)
     if ResultType.FAILURE in result_attribute.values():
         return ResultType.FAILURE
 
-    result_attribute = store_architecture()
-    result_dict.update(result_attribute)
-    if ResultType.FAILURE in result_attribute.values():
-        return ResultType.FAILURE
+    prepare_steps = [store_architecture, load_filesystem, create_qemu_image, infer_network_configuration]
 
-    result_attribute = load_filesystem()
-    result_dict.update(result_attribute)
-    if ResultType.FAILURE in result_attribute.values():
-        return ResultType.FAILURE
-
-    result_attribute = create_qemu_image()
-    result_dict.update(result_attribute)
-    if ResultType.FAILURE in result_attribute.values():
-        return ResultType.FAILURE
-
-    result_attribute = infer_network_configuration()
-    result_dict.update(result_attribute)
-    if ResultType.FAILURE in result_attribute.values():
-        return ResultType.FAILURE
+    for step in prepare_steps:
+        result_attribute = step()
+        result_dict.update(result_attribute)
+        print(result_attribute)
+        if ResultType.FAILURE in result_attribute.values():
+            return ResultType.FAILURE
 
     return ResultType.SUCCESS
 
@@ -82,9 +73,11 @@ def infer_network_configuration():
         child.expect('Password for user firmadyne: ')
         child.sendline('firmadyne')
         # filter ip address
-        child.expect('\'+[0-9]*.[0-9]*.[0-9]*.[0-9]*\'\)')
+        child.expect('\'[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}\'\)')
         ip_address = str(child.after).split('\'')[1]
+        print('Infer_network output:{}\n{}'.format(child.before, child.after))
         child.wait()
+        print('Infer_network IP: {}'.format(ip_address))
     except Exception:
         return {'infer_network_configuration': ResultType.FAILURE, 'error_message': 'Error executing infer_network script.\n{}'.format(str(child))}
 
@@ -151,6 +144,7 @@ def parse_arguments():
 def main():
     input_file = parse_arguments()
     clean_firmadyne()
+    print('input_file: {}'.format(input_file))
     firmadyne(input_file)
     clean_firmadyne()
 

@@ -32,7 +32,7 @@ class AnalysisPlugin(BasePlugin):
 
 def run_firmadyne(input_file):
 
-    command = '/usr/bin/python3 {}/firmadyne_wrapper.py {} > {}/LOG.log'.format(INTERNAL_DIRECTORY_PATH, input_file, FIRMADYNE_INSTALLATION_DIR)
+    command = '/usr/bin/python3 {}/firmadyne_wrapper.py {} &> {}/LOG.log'.format(INTERNAL_DIRECTORY_PATH, input_file, FIRMADYNE_INSTALLATION_DIR)
     execute_shell_command(command)
     try:
         result_file = '{}/results.json'.format(FIRMADYNE_INSTALLATION_DIR)
