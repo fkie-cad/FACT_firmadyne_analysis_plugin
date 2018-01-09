@@ -3,7 +3,8 @@ import pytest
 from common_helper_files import get_dir_of_file
 
 from plugins.analysis.firmadyne.internal.helper import ResultType
-from plugins.analysis.firmadyne.internal.firmadyne_wrapper import clean_firmadyne, extract_image, execute_firmadyne
+from plugins.analysis.firmadyne.internal.firmadyne_wrapper import clean_firmadyne, execute_firmadyne
+from plugins.analysis.firmadyne.internal.steps.prepare import extract_image
 from plugins.analysis.firmadyne.internal.steps.analysis import start_analysis, match_unique_exploit_log_files, get_list_of_sorted_lines_from_text_file, transform_string_of_paths_into_jstree_structure, \
     parse_logfile_list, start_nmap_analysis, start_metasploit_analysis, start_web_access_analysis, start_snmp_walk, execute_analysis_scripts
 from plugins.analysis.firmadyne.internal.steps.emulation import check_network_accessibility

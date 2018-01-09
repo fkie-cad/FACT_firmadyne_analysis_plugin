@@ -33,5 +33,7 @@ def check_network_accessibility(ip_address):
 
 
 def emulate_firmware():
+    logging.debug('start emulation')
     command = 'sudo {}/scratch/1/run.sh'.format(FIRMADYNE_PATH)
-    execute_shell_command_get_return_code(command)
+    output, rc = execute_shell_command_get_return_code(command)
+    logging.debug('emulation output {}'.format(output))

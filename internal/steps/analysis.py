@@ -136,7 +136,7 @@ def parse_logfile_list(logfile_list):
         log = remove_command_literals(log)
         log = str(log) + '\n------------\n'
         if not log:
-            print('Parsing logfile {} failed'.format(logfile))
+            logging.error('Parsing logfile {} failed'.format(logfile))
             return 0
         positive_log_data += log
 
