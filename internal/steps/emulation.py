@@ -10,10 +10,10 @@ def start_emulation(result_dict, emulation_init_time):
     firmware_emulation = start_emulation_process_parallel(emulation_init_time)
     network_accessibility = check_network_accessibility(result_dict['ip'])
     if not network_accessibility:
-        new_ip_address = check_all_host_addresses_and_return_accessible(result_dict['ip'])
-        if new_ip_address:
+        ip_address_with_new_host = check_all_host_addresses_and_return_accessible(result_dict['ip'])
+        if ip_address_with_new_host:
             result_dict.update({'emulation': ResultType.SUCCESS})
-            result_dict.update({'ip': new_ip_address})
+            result_dict.update({'ip': ip_address_with_new_host})
             return firmware_emulation
         result_dict.update({'emulation': ResultType.FAILURE, 'error_message': 'Firmadyne wasn\'t able to start the network while emulating'})
         return firmware_emulation
@@ -48,8 +48,8 @@ def check_all_host_addresses_and_return_accessible(ip_address):
 
 
 def cut_host_part_from_ip(ip_address):
-    ip_components = ip_address.split('.')
-    return '.'.join(ip_components[:3])
+    ip_address_components = ip_address.split('.')
+    return '.'.join(ip_address_components[:3])
 
 
 def emulate_firmware():
