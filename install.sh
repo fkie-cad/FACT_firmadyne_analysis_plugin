@@ -45,6 +45,9 @@ sudo -EH bundle install
 sudo -EH ln -s $(pwd)/msfconsole /usr/bin/
 cd ..
 
+echo "-> Install Fping"
+sudo -E apt-get -y install fping
+
 
 chmod a+x ../internal/additional_delete.sh
 cp ../internal/additional_delete.sh firmadyne/scripts/
