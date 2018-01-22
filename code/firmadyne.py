@@ -14,7 +14,7 @@ FIRMADYNE_INSTALLATION_DIR = os.path.join(get_dir_of_file(__file__), '../bin/fir
 class AnalysisPlugin(BasePlugin):
 
     NAME = 'firmadyne'
-    DEPENDENCYS = ['file_type']
+    DEPENDENCIES = ['file_type']
     DESCRIPTION = 'Dynamic Firmware Analysis utilizing Firmadyne'
     VERSION = '0.4'
 
