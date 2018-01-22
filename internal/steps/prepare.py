@@ -13,9 +13,9 @@ def prepare_emulation(input_file, result_dict):
     if ResultType.FAILURE in result_attribute.values():
         return ResultType.FAILURE
 
-    prepare_steps = [store_architecture, load_filesystem, create_qemu_image, infer_network_configuration]
+    preparation_steps = [store_architecture, load_filesystem, create_qemu_image, infer_network_configuration]
 
-    for step in prepare_steps:
+    for step in preparation_steps:
         result_attribute = step()
         result_dict.update(result_attribute)
         logging.debug(result_attribute)
@@ -30,8 +30,8 @@ def infer_network_configuration():
         child = pexpect.spawn('/bin/bash {}/scripts/inferNetwork.sh 1'.format(FIRMADYNE_PATH), timeout=80)
         child.expect('Password for user firmadyne: ')
         child.sendline('firmadyne')
-        # filter ip address
-        child.expect('\'[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}\'\)')
+        ip_address_filter = '\'[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}\'\)'
+        child.expect(ip_address_filter)
         ip_address = str(child.after).split('\'')[1]
         child.wait()
         logging.debug('Infer_network IP: {}'.format(ip_address))

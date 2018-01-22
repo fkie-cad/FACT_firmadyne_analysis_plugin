@@ -8,8 +8,7 @@ from helper import FIRMADYNE_PATH, ResultType
 
 def start_emulation(result_dict, emulation_init_time):
     firmware_emulation = start_emulation_process_parallel(emulation_init_time)
-    network_accessibility = check_network_accessibility(result_dict['ip'])
-    if not network_accessibility:
+    if not network_is_available(result_dict['ip']):
         result_dict.update({'emulation': ResultType.FAILURE, 'error_message': 'Firmadyne wasn\'t able to start the network while emulating'})
         return firmware_emulation
     result_dict.update({'emulation': ResultType.SUCCESS})
@@ -23,7 +22,7 @@ def start_emulation_process_parallel(emulation_init_time):
     return emulation_process
 
 
-def check_network_accessibility(ip_address):
+def network_is_available(ip_address):
     output, rc = execute_shell_command_get_return_code('ping -c 1 {}'.format(ip_address), timeout=5)
     logging.debug('check_network:\/n{}'.format(output))
     if rc == 0:
@@ -35,5 +34,5 @@ def check_network_accessibility(ip_address):
 def emulate_firmware():
     logging.debug('start emulation')
     command = 'sudo {}/scratch/1/run.sh'.format(FIRMADYNE_PATH)
-    output, rc = execute_shell_command_get_return_code(command)
+    output, _ = execute_shell_command_get_return_code(command)
     logging.debug('emulation output {}'.format(output))

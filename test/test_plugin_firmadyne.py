@@ -7,7 +7,7 @@ from plugins.analysis.firmadyne.internal.firmadyne_wrapper import clean_firmadyn
 from plugins.analysis.firmadyne.internal.steps.prepare import extract_image
 from plugins.analysis.firmadyne.internal.steps.analysis import start_analysis, match_unique_exploit_log_files, get_list_of_sorted_lines_from_text_file, transform_string_of_paths_into_jstree_structure, \
     parse_logfile_list, start_nmap_analysis, start_metasploit_analysis, start_web_access_analysis, start_snmp_walk, execute_analysis_scripts
-from plugins.analysis.firmadyne.internal.steps.emulation import check_network_accessibility
+from plugins.analysis.firmadyne.internal.steps.emulation import network_is_available
 
 
 TEST_FILE_PATH = os.path.join(get_dir_of_file(__file__), 'data')
@@ -109,7 +109,7 @@ def test_analysis_metasploit(input_data, expected):
     ('127.0.0.1', 1)
 ])
 def test_check_network_accessibility(input_data, expected):
-    assert check_network_accessibility(input_data) == expected
+    assert network_is_available(input_data) == expected
 
 
 def test_execute_analysis_scripts():
@@ -137,5 +137,5 @@ def test_execute_firmadyne():
 def test_firmadyne_scheng(self):
     file_path = '/media/firmware/firmware_files/network/lisas_firmware/RT-AC53_3.0.0.4_380_6038-g76a4aa5.trx'
     clean_firmadyne()
-    status, result = execute_firmadyne(file_path)
+    status, _ = execute_firmadyne(file_path)
     assert status == ResultType.SUCCESS
