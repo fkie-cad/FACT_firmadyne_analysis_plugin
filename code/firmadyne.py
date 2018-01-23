@@ -5,21 +5,21 @@ import os
 import sys
 import logging
 
-from analysis.PluginBase import BasePlugin
+from analysis.PluginBase import AnalysisBasePlugin
 
 INTERNAL_DIRECTORY_PATH = os.path.join(get_dir_of_file(__file__), '../internal')
 FIRMADYNE_INSTALLATION_DIR = os.path.join(get_dir_of_file(__file__), '../bin/firmadyne')
 
 
-class AnalysisPlugin(BasePlugin):
+class AnalysisPlugin(AnalysisBasePlugin):
 
     NAME = 'firmadyne'
     DEPENDENCIES = ['file_type']
     DESCRIPTION = 'Dynamic Firmware Analysis utilizing Firmadyne'
     VERSION = '0.4'
 
-    def __init__(self, plugin_adminstrator, config=None, timeout=600, recursive=True):
-        super().__init__(plugin_adminstrator, config=config, timeout=timeout, no_multithread=True, recursive=recursive, plugin_path=__file__)
+    def __init__(self, plugin_administrator, config=None, timeout=600, recursive=True):
+        super().__init__(plugin_administrator, config=config, timeout=timeout, no_multithread=True, recursive=recursive, plugin_path=__file__)
 
     def process_object(self, file_object):
         if 'filesystem' in file_object.processed_analysis['file_type']['mime']:
