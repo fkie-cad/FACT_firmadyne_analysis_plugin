@@ -147,8 +147,7 @@ def test_check_network_accessibility(input_data, expected):
                   '127.0.0.231\n127.0.0.232\n127.0.0.233\n127.0.0.234\n127.0.0.235\n127.0.0.236\n127.0.0.237\n'
                   '127.0.0.238\n127.0.0.239\n127.0.0.240\n127.0.0.241\n127.0.0.242\n127.0.0.243\n127.0.0.244\n'
                   '127.0.0.245\n127.0.0.246\n127.0.0.247\n127.0.0.248\n127.0.0.249\n127.0.0.250\n127.0.0.251\n'
-                  '127.0.0.252\n127.0.0.253\n127.0.0.254'
-)
+                  '127.0.0.252\n127.0.0.253\n127.0.0.254')
 ])
 def test_check_all_host_addresses_and_return_accessible(input_data, expected):
     assert check_all_host_addresses_and_return_accessible(input_data) == expected
