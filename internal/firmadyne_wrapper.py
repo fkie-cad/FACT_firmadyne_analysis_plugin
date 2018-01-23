@@ -35,7 +35,8 @@ def firmadyne(input_file, result_file_path):
 
 
 def execute_firmadyne(input_file):
-    result_dict = OrderedDict()
+    #result_dict = OrderedDict()
+    result_dict = {}
 
     preparation = prepare_emulation(input_file, result_dict)
     if preparation == ResultType.FAILURE:
