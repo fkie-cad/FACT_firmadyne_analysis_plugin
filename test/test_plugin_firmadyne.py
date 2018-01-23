@@ -1,4 +1,5 @@
 import os
+import gc
 import pytest
 from common_helper_files import get_dir_of_file
 
@@ -11,6 +12,10 @@ from plugins.analysis.firmadyne.internal.steps.emulation import network_is_avail
 
 
 TEST_FILE_PATH = os.path.join(get_dir_of_file(__file__), 'data')
+
+
+def teardown_module(module):
+    gc.collect()
 
 
 @pytest.mark.parametrize('input_data, expected', [
