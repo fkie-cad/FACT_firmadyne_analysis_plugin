@@ -181,6 +181,13 @@ def test_execute_firmadyne():
     clean_firmadyne()
 
 
+def test_execute_firmadyne_with_fping():
+    clean_firmadyne()
+    input_file = os.path.join(TEST_FILE_PATH, 'Archer C1200(EU)_V1_160918.zip')
+    assert execute_firmadyne(input_file)[0], ResultType.SUCCESS
+    clean_firmadyne()
+
+
 @pytest.mark.skip(reason='test file missing')
 def test_firmadyne_scheng(self):
     file_path = '/media/firmware/firmware_files/network/lisas_firmware/RT-AC53_3.0.0.4_380_6038-g76a4aa5.trx'
