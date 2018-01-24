@@ -20,7 +20,7 @@ from steps.analysis import start_analysis
 
 
 PROGRAM_NAME = 'Firmadyne Wrapper'
-PROGRAM_VERSION = '0.4'
+PROGRAM_VERSION = '0.5'
 PROGRAM_DESCRIPTION = 'Automates firmadyne execution and stores result as json file'
 
 
@@ -35,7 +35,7 @@ def run_firmadyne_and_store_result(input_file, result_file_path):
 
 
 def execute_firmadyne(input_file):
-    result_dict = {}
+    result_dict = OrderedDict()
 
     preparation = prepare_emulation(input_file, result_dict)
     if preparation == ResultType.FAILURE:
