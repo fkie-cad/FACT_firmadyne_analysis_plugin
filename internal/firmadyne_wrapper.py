@@ -41,7 +41,7 @@ def execute_firmadyne(input_file):
     if preparation == ResultType.FAILURE:
         return ResultType.FAILURE, result_dict
 
-    firmware_emulation = start_emulation(result_dict, emulation_init_time=40)
+    firmware_emulation = start_emulation(result_dict, emulation_init_time=60)
     if ResultType.FAILURE in result_dict.values():
         firmware_emulation.terminate()
         return ResultType.FAILURE, result_dict
@@ -56,11 +56,11 @@ def execute_firmadyne(input_file):
 
 def clean_firmadyne():
     change_dir_to_firmadyne_dir()
-    command = 'sudo {}/scripts/delete.sh 1 >> {}\LOG.log'.format(FIRMADYNE_PATH, FIRMADYNE_PATH)
+    command = 'sudo ./scripts/delete.sh 1'.format(FIRMADYNE_PATH)
     _, rc = execute_interactive_shell_command(command, inputs={'Password for user firmadyne: ': 'firmadyne'}, timeout=120)
     if rc > 0:
         return 0
-    command = 'sudo {}/scripts/additional_delete.sh  >> {}\LOG.log'.format(FIRMADYNE_PATH, FIRMADYNE_PATH)
+    command = 'sudo ./scripts/additional_delete.sh'.format(FIRMADYNE_PATH)
     execute_shell_command(command)
     return 1
 

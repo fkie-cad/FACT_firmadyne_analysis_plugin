@@ -8,9 +8,9 @@ echo "------------------------------------"
 
 echo "->  Install FIRMADYNE dependencies"
 sudo -E apt-get install -y policykit-1
-sudo -E apt-get install -y kpartx python-psycopg2 python3-psycopg2 snmp uml-utilities util-linux vlan postgresql nmap ruby ruby-dev rubygems
+sudo -E apt-get install -y kpartx python-psycopg2 snmp uml-utilities util-linux vlan postgresql nmap ruby ruby-dev rubygems
 sudo -E apt-get install -y qemu-system-arm qemu-system-mips qemu-system-x86 qemu-utils
-sudo -EH pip3 install pexpect
+sudo -EH pip3 install pexpect psycopg2
 
 echo "->  get Firmadyne"
 
@@ -54,6 +54,9 @@ echo "-> add necessary sudo rights"
 CURUSER=$(whoami 2>&1)
 printf "$CURUSER\tALL=NOPASSWD: /usr/bin/nmap \n\
 $CURUSER\tALL=NOPASSWD: /usr/local/bin/nmap \n\
+$CURUSER\tALL=NOPASSWD: /usr/sbin/tunctl \n\
+$CURUSER\tALL=NOPASSWD: /sbin/ip \n\
+$CURUSER\tALL=NOPASSWD: /bin/ip \n\
 $CURUSER\tALL=NOPASSWD: $FIRMADYNE_PATH/scripts/delete.sh \n\
 $CURUSER\tALL=NOPASSWD: $FIRMADYNE_PATH/scripts/additional_delete.sh \n\
 $CURUSER\tALL=NOPASSWD: $FIRMADYNE_PATH/scripts/makeImage.sh \n\

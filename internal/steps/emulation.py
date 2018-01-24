@@ -23,9 +23,9 @@ def start_emulation_process_parallel(emulation_init_time):
 
 
 def network_is_available(ip_address):
-    output, rc = execute_shell_command_get_return_code('ping -c 1 {}'.format(ip_address), timeout=5)
+    output, rc = execute_shell_command_get_return_code('ping -c 1 {}'.format(ip_address), timeout=10)
     logging.debug('check_network:\/n{}'.format(output))
-    if rc == 0:
+    if rc == 0 or '1 received' in output:
         return True
     else:
         return False
@@ -33,6 +33,6 @@ def network_is_available(ip_address):
 
 def emulate_firmware():
     logging.debug('start emulation')
-    command = 'sudo {}/scratch/1/run.sh'.format(FIRMADYNE_PATH)
+    command = '{}/scratch/1/run.sh'.format(FIRMADYNE_PATH)
     output, _ = execute_shell_command_get_return_code(command)
     logging.debug('emulation output {}'.format(output))

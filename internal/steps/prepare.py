@@ -69,7 +69,7 @@ def store_architecture():
 
 
 def extract_image(input_file):
-    command = 'python3 {}/sources/extractor/extractor.py -b Netgear -sql 127.0.0.1 -np -nk \'{}\' {}/images'.format(FIRMADYNE_PATH, input_file, FIRMADYNE_PATH)
+    command = 'python3 {}/sources/extractor/extractor.py -b Device -sql 127.0.0.1 -np -nk \'{}\' {}/images'.format(FIRMADYNE_PATH, input_file, FIRMADYNE_PATH)
 
     if not os.path.exists(input_file):
         return {'extraction': ResultType.FAILURE, 'error_message': 'Invalid path to the input file'}
