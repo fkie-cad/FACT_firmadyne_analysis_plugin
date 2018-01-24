@@ -24,7 +24,7 @@ PROGRAM_VERSION = '0.4'
 PROGRAM_DESCRIPTION = 'Automates firmadyne execution and stores result as json file'
 
 
-def firmadyne(input_file, result_file_path):
+def run_firmadyne_and_store_result(input_file, result_file_path):
     execution_result, result_dict = execute_firmadyne(input_file)
     if execution_result == ResultType.SUCCESS:
         result_dict['result'] = 'Firmadyne finished all Steps succesfully!'
@@ -57,7 +57,7 @@ def execute_firmadyne(input_file):
 def clean_firmadyne():
     change_dir_to_firmadyne_dir()
     command = 'sudo {}/scripts/delete.sh 1 >> {}\LOG.log'.format(FIRMADYNE_PATH, FIRMADYNE_PATH)
-    output, rc = execute_interactive_shell_command(command, inputs={'Password for user firmadyne: ': 'firmadyne'}, timeout=120)
+    _, rc = execute_interactive_shell_command(command, inputs={'Password for user firmadyne: ': 'firmadyne'}, timeout=120)
     if rc > 0:
         return 0
     command = 'sudo {}/scripts/additional_delete.sh  >> {}\LOG.log'.format(FIRMADYNE_PATH, FIRMADYNE_PATH)
@@ -92,7 +92,7 @@ def main():
     clean_firmadyne()
     logging.info('Execute Firmadyne on: {}'.format(args.input_file))
     logging.debug('result storage: {}'.format(args.output_file))
-    firmadyne(args.input_file, args.output_file)
+    run_firmadyne_and_store_result(args.input_file, args.output_file)
     clean_firmadyne()
 
 

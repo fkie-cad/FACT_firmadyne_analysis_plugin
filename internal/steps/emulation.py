@@ -8,12 +8,12 @@ from helper import FIRMADYNE_PATH, ResultType
 
 def start_emulation(result_dict, emulation_init_time):
     firmware_emulation = start_emulation_process_parallel(emulation_init_time)
-    network_accessibility = check_network_accessibility(result_dict['ip'])
-    if not network_accessibility:
+    if not network_is_available(result_dict['ip']):
         ip_address_with_new_host = check_all_host_addresses_and_return_accessible(result_dict['ip'])
         if ip_address_with_new_host:
             result_dict.update({'emulation': ResultType.SUCCESS})
             result_dict.update({'ip': ip_address_with_new_host})
+            result_dict.update({'emulation': ResultType.SUCCESS})
             return firmware_emulation
         result_dict.update({'emulation': ResultType.FAILURE, 'error_message': 'Firmadyne wasn\'t able to start the network while emulating'})
         return firmware_emulation
@@ -28,7 +28,7 @@ def start_emulation_process_parallel(emulation_init_time):
     return emulation_process
 
 
-def check_network_accessibility(ip_address):
+def network_is_available(ip_address):
     output, rc = execute_shell_command_get_return_code('ping -c 1 {}'.format(ip_address), timeout=5)
     logging.debug('check_network:\/n{}'.format(output))
     if rc == 0:
@@ -39,7 +39,7 @@ def check_network_accessibility(ip_address):
 
 def check_all_host_addresses_and_return_accessible(ip_address):
     ip_without_host_part = cut_host_part_from_ip(ip_address)
-    output, rc = execute_shell_command_get_return_code('fping -a -q -g {}.0/24'.format(ip_without_host_part))
+    output, _ = execute_shell_command_get_return_code('fping -a -q -g {}.0/24'.format(ip_without_host_part))
     if not output:
         return output
     else:
@@ -55,5 +55,5 @@ def cut_host_part_from_ip(ip_address):
 def emulate_firmware():
     logging.debug('start emulation')
     command = 'sudo {}/scratch/1/run.sh'.format(FIRMADYNE_PATH)
-    output, rc = execute_shell_command_get_return_code(command)
+    output, _ = execute_shell_command_get_return_code(command)
     logging.debug('emulation output {}'.format(output))

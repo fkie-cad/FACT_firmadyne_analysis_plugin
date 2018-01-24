@@ -1,5 +1,6 @@
 from common_helper_files.fail_safe_file_operations import get_binary_from_file
 from common_helper_process.fail_safe_subprocess import execute_shell_command_get_return_code
+import logging
 import os
 import re
 
@@ -26,7 +27,8 @@ def execute_analysis_scripts(result_dict):
 # this function creates snmp.public.txt and snmp.private.txt and does not delete them
 def start_snmp_walk(result_dict):
     command = '/bin/bash {}/analyses/snmpwalk.sh {}'.format(FIRMADYNE_PATH, result_dict['ip'])
-    if not execute_shell_command_get_return_code(command)[1]:
+    _, return_code = execute_shell_command_get_return_code(command)
+    if return_code == 0:
         result_dict['snmp_walk'] = 'snmpwalk was executed successfully'
         return ResultType.SUCCESS
     return ResultType.FAILURE
@@ -35,8 +37,8 @@ def start_snmp_walk(result_dict):
 def start_web_access_analysis(result_dict):
     logfile_path = os.path.join(FIRMADYNE_PATH, 'log.txt')
     command = 'python3 {}/analyses/webAccess.py 1 {} {}'.format(FIRMADYNE_PATH, result_dict['ip'], logfile_path)
-
-    if not execute_shell_command_get_return_code(command)[1]:
+    _, return_code = execute_shell_command_get_return_code(command)
+    if return_code == 0:
         list_of_jstree_dict = transform_log_data_of_web_accessible_files_into_jstree_structure(logfile_path)
         result_dict['accessible_web_files'] = list_of_jstree_dict if list_of_jstree_dict else 'No accessible web files found'
         return ResultType.SUCCESS
@@ -45,7 +47,7 @@ def start_web_access_analysis(result_dict):
 
 def transform_log_data_of_web_accessible_files_into_jstree_structure(logfile_path):
     sorted_lines_list = get_list_of_sorted_lines_from_text_file(logfile_path)
-    sorted_lines_list = move_folder_strings_at_the_end(sorted_lines_list)
+    sorted_lines_list = move_folder_strings_to_the_end(sorted_lines_list)
     sorted_lines = "".join(sorted_lines_list)
     list_of_jstree_dict = transform_string_of_paths_into_jstree_structure(sorted_lines)
     return list_of_jstree_dict
@@ -85,7 +87,7 @@ def derive_jstree_tree_structure_from_path(list_element, list_of_jstree_dict, pa
     return jstree_tree_list
 
 
-def move_folder_strings_at_the_end(string_list):
+def move_folder_strings_to_the_end(string_list):
     return sorted(string_list, key=lambda x: 1 if '/' in x else 0)
 
 
@@ -99,7 +101,8 @@ def get_list_of_sorted_lines_from_text_file(text_file_path):
 def start_metasploit_analysis(result_dict):
     logfiles_dir = os.path.join(FIRMADYNE_PATH, 'exploits')
     command = 'mkdir {}; python2 {}/analyses/runExploits.py -t {} -o {}/exploit -e x'.format(logfiles_dir, FIRMADYNE_PATH, result_dict['ip'], logfiles_dir)
-    if not execute_shell_command_get_return_code(command)[1]:
+    _, return_code = execute_shell_command_get_return_code(command)
+    if return_code == 0:
         positive_logs_list = parse_positive_metasploit_logs(logfiles_dir)
         result_dict['metasploit_results'] = positive_logs_list if positive_logs_list else 'No Vulnerability to the Metasploit Exploits!'
         return ResultType.SUCCESS
@@ -109,7 +112,8 @@ def start_metasploit_analysis(result_dict):
 def start_nmap_analysis(result_dict):
     logfile_path = os.path.join(FIRMADYNE_PATH, '/nmap.log')
     command = 'sudo nmap -O -sV {} -oN {}'.format(result_dict['ip'], logfile_path)
-    if not execute_shell_command_get_return_code(command)[1]:
+    _, return_code = execute_shell_command_get_return_code(command)
+    if return_code == 0:
         attribute_list = parse_log_file(logfile_path)
         if attribute_list:
             result_dict['nmap_results'] = attribute_list
@@ -121,12 +125,12 @@ def parse_positive_metasploit_logs(logfiles_dir):
     command = 'grep -rnw -e \'[+]\' {}'.format(logfiles_dir)
     command_stdout, return_code = execute_shell_command_get_return_code(command)
     if return_code > 0:
-        return 0
+        return None
     exploit_log_filename_list = match_unique_exploit_log_files(command_stdout)
     if not exploit_log_filename_list:
-        return 0
-    log_data_list = parse_logfile_list(exploit_log_filename_list)
-    return log_data_list
+        return None
+    log_data = parse_logfile_list(exploit_log_filename_list)
+    return log_data
 
 
 def parse_logfile_list(logfile_list):
@@ -137,7 +141,7 @@ def parse_logfile_list(logfile_list):
         log = str(log) + '\n------------\n'
         if not log:
             logging.error('Parsing logfile {} failed'.format(logfile))
-            return 0
+            return None
         positive_log_data += log
 
     return positive_log_data
