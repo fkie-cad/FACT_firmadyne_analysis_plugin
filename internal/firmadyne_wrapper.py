@@ -20,7 +20,7 @@ from steps.analysis import start_analysis
 
 
 PROGRAM_NAME = 'Firmadyne Wrapper'
-PROGRAM_VERSION = '0.4'
+PROGRAM_VERSION = '0.5'
 PROGRAM_DESCRIPTION = 'Automates firmadyne execution and stores result as json file'
 
 

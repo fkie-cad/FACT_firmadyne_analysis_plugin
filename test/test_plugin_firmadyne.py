@@ -8,7 +8,7 @@ from plugins.analysis.firmadyne.internal.firmadyne_wrapper import clean_firmadyn
 from plugins.analysis.firmadyne.internal.steps.prepare import extract_image
 from plugins.analysis.firmadyne.internal.steps.analysis import start_analysis, match_unique_exploit_log_files, get_list_of_sorted_lines_from_text_file, transform_string_of_paths_into_jstree_structure, \
     parse_logfile_list, start_nmap_analysis, start_metasploit_analysis, start_web_access_analysis, start_snmp_walk, execute_analysis_scripts
-from plugins.analysis.firmadyne.internal.steps.emulation import network_is_available
+from plugins.analysis.firmadyne.internal.steps.emulation import network_is_available, get_subnet_prefix, check_all_host_addresses_and_return_accessible
 
 
 TEST_FILE_PATH = os.path.join(get_dir_of_file(__file__), 'data')
@@ -117,6 +117,25 @@ def test_check_network_accessibility(input_data, expected):
     assert network_is_available(input_data) == expected
 
 
+def subnet_hosts_string(subnet_prefix):
+    result = []
+    for i in range(1, 255):
+        result.append('{}{}'.format(subnet_prefix, i))
+    return '\n'.join(result)
+
+
+def test_check_all_host_addresses_and_return_accessible():
+    assert check_all_host_addresses_and_return_accessible('127.0.0.1') == subnet_hosts_string('127.0.0.')
+
+
+@pytest.mark.parametrize('input_data, expected', [
+    ('192.168.1.0', '192.168.1'),
+    ('127.0.0.1', '127.0.0')
+])
+def test_get_subnet_prefix(input_data, expected):
+    assert get_subnet_prefix(input_data) == expected
+
+
 def test_execute_analysis_scripts():
     assert execute_analysis_scripts({'ip': ''}) == ResultType.FAILURE
 
@@ -131,16 +150,12 @@ def test_clean_firmadyne():
     assert clean_firmadyne() == 1
 
 
-def test_execute_firmadyne():
+@pytest.mark.parametrize('test_firmware', [
+    ('WNAP320 Firmware Version 2.0.3.zip'),
+    ('Archer C1200(EU)_V1_160918.zip')
+])
+def test_execute_firmadyne(test_firmware):
     clean_firmadyne()
-    input_file = os.path.join(TEST_FILE_PATH, 'WNAP320 Firmware Version 2.0.3.zip')
+    input_file = os.path.join(TEST_FILE_PATH, test_firmware)
     assert execute_firmadyne(input_file)[0], ResultType.SUCCESS
     clean_firmadyne()
-
-
-@pytest.mark.skip(reason='test file missing')
-def test_firmadyne_scheng(self):
-    file_path = '/media/firmware/firmware_files/network/lisas_firmware/RT-AC53_3.0.0.4_380_6038-g76a4aa5.trx'
-    clean_firmadyne()
-    status, _ = execute_firmadyne(file_path)
-    assert status == ResultType.SUCCESS

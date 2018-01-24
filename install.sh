@@ -33,7 +33,7 @@ echo "->  Download pre-compiled binaries"
 echo "->  Initialize FIRMADYNE database"
 sudo -EH python3 ../internal/init_database.py
 
-(cd ../test/data && wget -nc http://www.downloads.netgear.com/files/GDC/WNAP320/WNAP320%20Firmware%20Version%202.0.3.zip)
+(cd ../test/data && wget -nc 'http://www.downloads.netgear.com/files/GDC/WNAP320/WNAP320%20Firmware%20Version%202.0.3.zip' 'http://static.tp-link.com/Archer%20C1200(EU)_V1_160918.zip')
 
 echo "-> Install Metasploit"
 sudo -E apt-get -y install autoconf bison build-essential libapr1 libaprutil1 libcurl4-openssl-dev libgmp3-dev libpcap-dev libpq-dev libreadline6-dev libsqlite3-dev libssl-dev libsvn1 libtool libxml2 libxml2-dev libxslt-dev libyaml-dev locate ncurses-dev openssl postgresql postgresql-contrib xsel zlib1g zlib1g-dev
@@ -44,6 +44,9 @@ sudo -EH gem install bundler
 sudo -EH bundle install
 sudo -EH ln -s $(pwd)/msfconsole /usr/bin/
 cd ..
+
+echo "-> Install Fping"
+sudo -E apt-get install -y fping
 
 
 chmod a+x ../internal/additional_delete.sh

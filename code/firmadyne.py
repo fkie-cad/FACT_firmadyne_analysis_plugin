@@ -16,7 +16,7 @@ class AnalysisPlugin(AnalysisBasePlugin):
     NAME = 'firmadyne'
     DEPENDENCIES = ['file_type']
     DESCRIPTION = 'Dynamic Firmware Analysis utilizing Firmadyne'
-    VERSION = '0.4'
+    VERSION = '0.5'
 
     def __init__(self, plugin_administrator, config=None, timeout=600, recursive=True):
         super().__init__(plugin_administrator, config=config, timeout=timeout, no_multithread=True, recursive=recursive, plugin_path=__file__)
