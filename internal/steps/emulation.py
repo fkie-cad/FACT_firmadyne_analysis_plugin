@@ -38,7 +38,7 @@ def network_is_available(ip_address):
 
 
 def check_all_host_addresses_and_return_accessible(ip_address):
-    ip_without_host_part = cut_host_part_from_ip(ip_address)
+    ip_without_host_part = get_subnet_prefix(ip_address)
     output, _ = execute_shell_command_get_return_code('fping -a -q -g {}.0/24'.format(ip_without_host_part))
     if not output:
         return output
@@ -47,7 +47,7 @@ def check_all_host_addresses_and_return_accessible(ip_address):
         return output.strip()
 
 
-def cut_host_part_from_ip(ip_address):
+def get_subnet_prefix(ip_address):
     ip_address_components = ip_address.split('.')
     return '.'.join(ip_address_components[:3])
 

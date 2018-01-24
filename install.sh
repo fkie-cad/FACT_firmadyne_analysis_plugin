@@ -46,7 +46,7 @@ sudo -EH ln -s $(pwd)/msfconsole /usr/bin/
 cd ..
 
 echo "-> Install Fping"
-sudo -E apt-get -y install fping
+sudo -E apt-get install -y fping
 
 
 chmod a+x ../internal/additional_delete.sh

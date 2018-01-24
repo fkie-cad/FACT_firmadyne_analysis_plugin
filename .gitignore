@@ -12,3 +12,4 @@ nose2-junit.xml
 .settings/
 bin/
 test/data/WNAP320 Firmware Version 2.0.3.zip
+test/data/Archer C1200(EU)_V1_160918.zip
