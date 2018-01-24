@@ -1,7 +1,7 @@
 import multiprocessing
 import time
 import logging
-from common_helper_process.fail_safe_subprocess import execute_shell_command_get_return_code
+from common_helper_process.fail_safe_subprocess import execute_shell_command_get_return_code, execute_shell_command
 
 from helper import FIRMADYNE_PATH, ResultType
 
@@ -39,12 +39,10 @@ def network_is_available(ip_address):
 
 def check_all_host_addresses_and_return_accessible(ip_address):
     ip_without_host_part = get_subnet_prefix(ip_address)
-    output, _ = execute_shell_command_get_return_code('fping -a -q -g {}.0/24'.format(ip_without_host_part))
-    if not output:
-        return output
-    else:
+    output = execute_shell_command('fping -a -q -g {}.0/24'.format(ip_without_host_part))
+    if output != '':
         logging.debug('new ip with other host address is detected:{}'.format(output))
-        return output.strip()
+    return output.strip()
 
 
 def get_subnet_prefix(ip_address):
@@ -55,5 +53,5 @@ def get_subnet_prefix(ip_address):
 def emulate_firmware():
     logging.debug('start emulation')
     command = 'sudo {}/scratch/1/run.sh'.format(FIRMADYNE_PATH)
-    output, _ = execute_shell_command_get_return_code(command)
+    output = execute_shell_command(command)
     logging.debug('emulation output {}'.format(output))
