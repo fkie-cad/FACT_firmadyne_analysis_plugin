@@ -1,4 +1,5 @@
 # FACT plug-in - Firmadyne
+[![BCH compliance](https://bettercodehub.com/edge/badge/fkie-cad/FACT_firmadyne_analysis_plugin?branch=master)](https://bettercodehub.com/)  
 :exclamation: **Caution:** This plug-in is quite experimental at the moment. Feel free to improve it.
 
 [Firmadyne](https://github.com/firmadyne/firmadyne) integration into the [Firmware Analysis and Comparison Tool](https://fkie-cad.github.io/FACT_core/).
